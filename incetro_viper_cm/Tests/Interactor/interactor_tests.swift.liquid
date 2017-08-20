@@ -1,0 +1,30 @@
+{% include 'header' %}
+
+@testable
+import {{ custom_parameters.project_name }}
+import XCTest
+
+// MARK: - {{ prefix }}{{ module_info.name }}InteractorTests
+
+class {{ prefix }}{{ module_info.name }}InteractorTests: XCTestCase {
+
+    let interactor = {{ prefix }}{{ module_info.name }}Interactor()
+    let presenter  = MockPresenter()
+    
+    override func setUp() {
+        
+        interactor.output = presenter
+    }
+
+    // MARK: - MockPresenter
+    
+    class MockPresenter: {{ prefix }}{{ module_info.name }}InteractorOutput {
+
+        var processErrorMessageDidCall = false
+
+        func processErrorMessage(_ errorMessage: String) {
+            
+            processErrorMessageDidCall = true
+        }
+    }
+}

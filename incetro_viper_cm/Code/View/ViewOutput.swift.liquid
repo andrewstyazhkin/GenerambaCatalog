@@ -1,0 +1,10 @@
+{% include 'header' %}
+
+import Foundation
+
+// MARK: - {{ prefix }}{{ module_info.name }}ViewOutput
+
+protocol {{ prefix }}{{ module_info.name }}ViewOutput {
+    
+    func didTriggerViewReadyEvent()
+}

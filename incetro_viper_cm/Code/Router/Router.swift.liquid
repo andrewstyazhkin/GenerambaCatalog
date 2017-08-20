@@ -1,0 +1,20 @@
+{% include 'header' %}
+
+import Foundation
+
+// MARK: - {{ prefix }}{{ module_info.name }}Router
+
+class {{ prefix }}{{ module_info.name }}Router {
+    
+    var transitionHandler: TransitionHandler?
+}
+
+// MARK: - {{ prefix }}{{ module_info.name }}RouterInput
+
+extension {{ prefix }}{{ module_info.name }}Router: {{ prefix }}{{ module_info.name }}RouterInput {
+    
+    func close() {
+        
+        transitionHandler?.closeCurrentModule(true)
+    }
+}

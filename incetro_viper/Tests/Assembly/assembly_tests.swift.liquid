@@ -1,0 +1,51 @@
+{% include 'header' %}
+
+@testable
+import {{ custom_parameters.project_name }}
+import XCTest
+import Swinject
+
+// MARK: - {{ prefix }}{{ module_info.name }}ModuleAssemblyTests
+
+class {{ prefix }}{{ module_info.name }}ModuleAssemblyTests: XCTestCase {
+
+    func testConfigureModuleForViewController() {
+
+        //given
+
+        let module = {{ prefix }}{{ module_info.name }}Module()
+        let container = Container()
+        let assembly = {{ prefix }}{{ module_info.name }}ModuleAssembly()
+        
+        assembly.assemble(inContainer: container)
+        
+        //when
+
+        guard let viewController = module.instantiateTransitionHandler() as? {{ prefix }}{{ module_info.name }}ViewController else {
+
+            XCTFail("Cannot instantiate {{ prefix }}{{ module_info.name }}ViewController")
+            return
+        }
+
+        //then
+        
+        XCTAssertNotNil(viewController.output)
+        XCTAssertTrue(viewController.output is {{ prefix }}{{ module_info.name }}Presenter)
+        
+        let presenter = viewController.output as? {{ prefix }}{{ module_info.name }}Presenter
+        
+        XCTAssertNotNil(presenter?.view)
+        XCTAssertNotNil(presenter?.router)
+        XCTAssertTrue(presenter?.router is {{ prefix }}{{ module_info.name }}Router)
+        
+        let interactor = presenter?.interactor as? {{ prefix }}{{ module_info.name }}Interactor
+        
+        XCTAssertNotNil(interactor?.output)
+        XCTAssertTrue(interactor?.output is {{ prefix }}{{ module_info.name }}Presenter)
+        
+        let router = presenter?.router as? {{ prefix }}{{ module_info.name }}Router
+        
+        XCTAssertNotNil(router?.transitionHandler)
+        XCTAssertTrue(router?.transitionHandler is {{ prefix }}{{ module_info.name }}ViewController)
+    }
+}

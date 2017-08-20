@@ -1,0 +1,59 @@
+{% include 'header' %}
+
+@testable
+import {{ custom_parameters.project_name }}
+import XCTest
+
+// MARK: - {{ prefix }}{{ module_info.name }}RouterTests
+
+class {{ prefix }}{{ module_info.name }}RouterTests: XCTestCase {
+
+    let router = {{ prefix }}{{ module_info.name }}Router()
+    let transitionHandler = MockTransitionHandler()
+    
+    override func setUp() {
+        
+        router.transitionHandler = transitionHandler
+    }
+    
+    func testThatRouterCloseModule() {
+        
+        // given
+        
+        transitionHandler.closeCurrentModuleDidCall = false
+        
+        // when
+        
+        router.close()
+        
+        // then
+        
+        XCTAssertTrue(transitionHandler.closeCurrentModuleDidCall)
+    }
+
+    // MARK: - MockTransitionHandler
+    
+    class MockTransitionHandler: TransitionHandler {
+        
+        var moduleInput: ModuleInput?
+        
+        var closeCurrentModuleDidCall = false
+        var openModuleDidCall         = false
+        
+        func closeCurrentModule(_ animated: Bool) {
+            
+            closeCurrentModuleDidCall = true
+        }
+        
+        func openModule<M>(_ moduleType: M.Type) -> TransitionPromise<M.Input> where M : Module {
+
+            openModuleDidCall = true
+
+            let module      = M()
+            let source      = {{ prefix }}{{ module_info.name }}ViewController()
+            let destination = module.instantiateTransitionHandler()
+
+            return TransitionPromise<M.Input>(with: source, destination: destination, for: M.Input.self)
+        }
+    }
+}
